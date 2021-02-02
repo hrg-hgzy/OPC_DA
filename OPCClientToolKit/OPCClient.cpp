@@ -38,7 +38,8 @@ ATL::CComPtr<IMalloc> COPCClient::iMalloc;
 
 
 void COPCClient::init()
-{	
+{
+	/*
 	HRESULT	result = CoInitialize(NULL);
 	if (FAILED(result))
 	{
@@ -52,10 +53,15 @@ void COPCClient::init()
 	{
 		throw OPCException("CoGetMalloc failed");
 	}
+	*/
+	CoInitializeSecurity(NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_NONE, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
+
+	HRESULT result = CoGetMalloc(MEMCTX_TASK, &iMalloc);
+	if (FAILED(result))
+	{
+		throw OPCException("CoGetMalloc failed");
+	}
 }
-
-
-
 
 void COPCClient::stop()
 {
