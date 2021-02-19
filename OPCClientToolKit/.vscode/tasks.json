@@ -11,9 +11,10 @@
                 "OPCClientToolKit.vcxproj",
                 // Ask msbuild to generate full paths for file names.
                 "/property:GenerateFullPaths=true",
+                "/property:Configuration=Debug",
                 "/t:build",
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
-                "/consoleloggerparameters:NoSummary"
+                "/consoleloggerparameters:NoSummary",
             ],
             "group": "build",
             "presentation": {
@@ -24,6 +25,27 @@
             "problemMatcher": "$msCompile"
         },
 {
+            "label": "release",
+            "type": "shell",
+            "command": "msbuild",
+            "args": [
+                "OPCClientToolKit.vcxproj",
+                // Ask msbuild to generate full paths for file names.
+                "/property:GenerateFullPaths=true",
+                "/property:Configuration=Release",
+                "/t:build",
+                // Do not generate summary otherwise it leads to duplicate errors in Problems panel
+                "/consoleloggerparameters:NoSummary",
+            ],
+            "group": "build",
+            "presentation": {
+                    "reveal": "always",
+                     "panel": "new",
+            },
+            // Use the standard MS compiler pattern to detect errors, warnings and infos
+            "problemMatcher": "$msCompile"
+        }
+{
             "label": "clean",
             "type": "shell",
             "command": "msbuild",
@@ -33,7 +55,7 @@
                 "/property:GenerateFullPaths=true",
                 "/t:clean",
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
-                "/consoleloggerparameters:Summary"
+                "/consoleloggerparameters:Summary",
             ],
             "group": "build",
             "presentation": {
