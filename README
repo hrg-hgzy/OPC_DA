@@ -4,6 +4,8 @@
 
 由于在tasks.json中直接调用msbuild，所以需要启动vscode时具备指向msbuild的环境变量：
 即从“Developer Command Prompt for VS 2019”命令行启动。
+可以参考technical-doc的wiki：配置visual code之vc
+
 
 用vscode打开项目以后，可以直接用ctrl+shift+b, 然后选择build编译debug版本，选择release编译release版本。
 
