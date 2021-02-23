@@ -1,6 +1,8 @@
 尽管项目有三个子文件夹，但是只是为了保证项目的完整，我们只需要编译OPCClientToolKit下的内容即可。
 
-当使用vscode打开文件夹时，直接打开OPCClientToolKit。由于在tasks.json中直接调用msbuild，所以需要启动vscode时具备指向msbuild的环境变量：
+当使用vscode打开文件夹时，直接打开OPCClientToolKit。
+
+由于在tasks.json中直接调用msbuild，所以需要启动vscode时具备指向msbuild的环境变量：
 即从“Developer Command Prompt for VS 2019”命令行启动。
 
 用vscode打开项目以后，可以直接用ctrl+shift+b, 然后选择build编译debug版本，选择release编译release版本。
