@@ -21,6 +21,8 @@ Boston, MA  02111-1307, USA.
 #include "OPCHost.h"
 #include "OPCServer.h"
 #include "OpcEnum.h"
+#include <fstream>
+#include <iostream>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -97,22 +99,42 @@ void CRemoteHost::makeRemoteObject(const IID requestedClass, const IID requested
 
 CLSID CRemoteHost::GetCLSIDFromRemoteRegistry(const CString & hostName, const CString &progID)
 {
-   CString keyName = "SOFTWARE\\Classes\\" + progID + "\\Clsid";
-   HKEY remoteRegHandle;
-   HKEY keyHandle;
-   char classIdString[100];
-   CLSID classId;
-   HRESULT result = RegConnectRegistry(hostName, HKEY_LOCAL_MACHINE, &remoteRegHandle);
-   if (SUCCEEDED(result)){
-       result = RegOpenKeyEx(remoteRegHandle, keyName, 0, KEY_READ, &keyHandle);
-	   if (SUCCEEDED(result)){
-		   DWORD entryType;
+#if 1
+	CLSID classId;
+	USES_CONVERSION;
+	char classIdString[100];
+	std::ifstream infile;
+	infile.open("./classid");
+	if(!infile.is_open ())
+		std::cout << "Open classid config file failure" << std::endl;
+	else{
+		infile >> classIdString;
+		std::cout << classIdString << std::endl;
+		infile.close();
+	}
+	LPOLESTR sz = A2W(classIdString);
 	
-		   unsigned bufferSize = 100;
-           result = RegQueryValueEx(keyHandle, NULL, 0, &entryType, (LPBYTE)&classIdString, (LPDWORD)&bufferSize);
-           if (FAILED(result)){
-			printf("here");
-		   }else{
+	if (CLSIDFromString(sz,&classId) != S_OK){
+		printf("Failed");
+	}
+   return classId;
+#else
+	CString keyName = "SOFTWARE\\Classes\\" + progID + "\\Clsid";
+	HKEY remoteRegHandle;
+	HKEY keyHandle;
+	char classIdString[100];
+	CLSID classId;
+	HRESULT result = RegConnectRegistry(hostName, HKEY_LOCAL_MACHINE, &remoteRegHandle);
+	if (SUCCEEDED(result)){
+		result = RegOpenKeyEx(remoteRegHandle, keyName, 0, KEY_READ, &keyHandle);
+		if (SUCCEEDED(result)){
+			DWORD entryType;
+
+			unsigned bufferSize = 100;
+			result = RegQueryValueEx(keyHandle, NULL, 0, &entryType, (LPBYTE)&classIdString, (LPDWORD)&bufferSize);
+			if (FAILED(result)){
+				printf("here");
+			}else{
 				USES_CONVERSION;
 				LPOLESTR sz = A2W(classIdString);
 				if (CLSIDFromString(sz,&classId) != S_OK){
@@ -125,6 +147,7 @@ CLSID CRemoteHost::GetCLSIDFromRemoteRegistry(const CString & hostName, const CS
 	RegCloseKey(remoteRegHandle);
 	RegCloseKey(keyHandle);
 	return classId;
+#endif
 }
 
 
